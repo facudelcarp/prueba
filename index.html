@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Player - Samsung TV Compatible</title>
+  <link href="https://vjs.zencdn.net/8.23.4/video-js.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      background: #000; 
+      font-family: Arial, sans-serif; 
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .video-container { 
+      width: 100%;
+      max-width: 1280px;
+    }
+    h1 { 
+      color: white; 
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    video {
+      width: 100%;
+      height: auto;
+      background: #000;
+    }
+    .error { 
+      color: #ff6b6b; 
+      padding: 10px;
+      background: #222;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="video-container">
+    <h1>🎬 Reproductor de Video</h1>
+    <video
+      id="my-video"
+      class="video-js vjs-default-skin"
+      controls
+      preload="auto"
+      crossOrigin="anonymous"
+      data-setup='{"html5": {"hls": {"overrideNative": true}}, "responsive": true, "fluid": true}'
+    >
+      <source src="https://51a1.crackstreamslivehd.com/disney4/tracks-v1a1/mono.m3u8?ip=152.171.180.73&token=5c33bc35addad62d94dd03f4e9d01600629cca3d-f1-1768736038-1768682038" type="application/x-mpegURL" />
+      <p class="vjs-no-js">
+        Para reproducir este video, por favor habilita JavaScript
+      </p>
+    </video>
+    <div class="error" id="error-msg" style="display:none;"></div>
+  </div>
+
+  <script src="https://vjs.zencdn.net/8.23.4/video.min.js"></script>
+  <script>
+    var player = videojs('my-video', {
+      html5: {
+        hls: {
+          overrideNative: true,
+          enableLLHLS: true,
+          smoothQualityChange: true,
+          lowLiveLatency: false,
+          useBandwidthFromLocalStorage: false
+        }
+      },
+      controls: true,
+      autoplay: true,
+      preload: 'auto',
+      liveui: true
+    });
+
+    // Manejo de errores
+    player.on('error', function() {
+      var errorObj = player.error();
+      var errorMsg = document.getElementById('error-msg');
+      if (errorObj) {
+        errorMsg.textContent = 'Error: ' + (errorObj.message || 'No se pudo cargar el video');
+        errorMsg.style.display = 'block';
+        console.log('Player Error:', errorObj);
+      }
+    });
+
+    // Log de eventos para debugging
+    player.on('loadstart', function() {
+      console.log('Video cargando...');
+    });
+
+    player.on('loadedmetadata', function() {
+      console.log('Metadata cargado');
+      document.getElementById('error-msg').style.display = 'none';
+    });
+
+    player.on('play', function() {
+      console.log('Reproduciendo');
+    });
+  </script>
+</body>
